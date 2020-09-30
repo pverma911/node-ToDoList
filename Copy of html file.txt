@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>What kinda dayyy</title>
+    </head>
+    <body>
+        <!-- <h1> It's  </h1>  To add key -->
+
+        <% if(dayOf ==="Sunday" || dayOf ==="Saturday") { %>  <!-- All these should e used when putting JS in HTML -->
+            <h1 style="color:wheat;"><%= dayOf %> ToDo List </h1>
+        <% } else { %>
+            <h1 style="color:teal;"><%= dayOf %> ToDo List </h1>
+        <% } %>
+          
+        
+        
+    </body>
+</html>
