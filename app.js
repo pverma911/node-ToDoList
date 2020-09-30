@@ -7,7 +7,7 @@ const _= require("lodash");
 
 const app = express();
 
-app.set('view engine','ejs');   // Tell the code to use EJS
+app.set('view engine','ejs');   
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
@@ -15,11 +15,10 @@ app.use(express.static("public"));
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
-// Implementing a DataBase //
 
-mongoose.connect("mongodb://localhost:27017/todolistData"); // Only used as Local Storage
-// For Atlas: mongoose.connect("mongodb+srv://admin-pranshu:sampledata123@cluster0-7wubs.mongodb.net/todolistData");        // For cloud Connectivity
-// Creating a schema 
+
+mongoose.connect("mongodb://localhost:27017/todolistData"); 
+
 
 const itemsSchema = new mongoose.Schema({
     name: String
@@ -41,9 +40,9 @@ const item3 = new Item({
     name: "<-- Hit this to delete an item"
 });
 
-// Inserting stuff
 
-const defaultItems =[item1, item2, item3];      // Array to store items 1-3
+
+const defaultItems =[item1, item2, item3];      
 
 // New Schema:
 
@@ -63,8 +62,7 @@ app.get("/", function(req,res){
 
     // Finding the data in DBase:
 
-    Item.find({},function(err,founditems){ // {}--> Means find all 
-    // To make sure items are not added again and again
+    Item.find({},function(err,founditems){ 
         if(founditems.length === 0){
             Item.insertMany(defaultItems, function(err){
                 if(err){
@@ -98,7 +96,7 @@ app.post("/",function(req,res){
     });
    
     if(listName === "Today"){
-        item.save(); // Instead of using insert method
+        item.save(); 
         res.redirect("/");
     }
     else{
@@ -119,7 +117,7 @@ app.post("/delete",function(req,res){
     const listName =req.body.listed;
 
     if(listName === "Today"){
-        Item.findByIdAndRemove(checkedId, function(err){ // Find using Id and then remove data
+        Item.findByIdAndRemove(checkedId, function(err){ 
             if(!err){
                 console.log("Succesfully deleted Item");
                 res.redirect("/");
@@ -142,25 +140,23 @@ app.post("/delete",function(req,res){
 
 app.get("/:title",function(req,res){
     const titleName = _.capitalize(req.params.title);
-    // Check if titleName already exists.
+    
 
     List.findOne({name: titleName}, function(err, foundList){
         if(!err){
             if(!foundList){
-                // console.log("Doesn't exists");
-                // Create a New List
+                
                 const list = new List({
                     name: titleName,
                     items: defaultItems
                 });
                 
                 list.save();
-                res.redirect("/" + titleName);  // redirect on a custom page
+                res.redirect("/" + titleName);  
             }
             else{
-                // console.log("Name occupied");
-                // Show an existing List
-                res.render("list",{listTitle: foundList.name, newList: foundList.items}); // {key: value} , Data will put in the item
+                
+                res.render("list",{listTitle: foundList.name, newList: foundList.items}); 
 
                 }
             }
@@ -188,64 +184,3 @@ app.listen(process.env.PORT || 3000, function(){
 
 
 
-
-
-
-
-
-// app.get("/", function(req,res){
-    
-    // Code to check if today is weekend or not
-
-    // var today = new Date();            // Date obj
-    // var today = today.getDay();     // old code
-    // var whatDay ="";    //value
-
-//     if(today.getDay() === 6 || today.getDay() === 0) //getDate is used to getDate in number
-//     {
-//         whatDay ="Weekend";
-//     }
-
-//     else{
-//         whatDay ="Weekday";
-//     }
-
-
-// To check what day it is
-
-// switch (today) {
-//     case 0:
-//         whatDay = "Sunday";
-
-//         break;
-
-//     case 1:
-//         whatDay = "Monday";
-        
-//         break;
-
-//     case 2:
-//         whatDay = "Tuesday";
-        
-//         break;
-
-//     case 3:
-//         whatDay = "Wednesday";
-    
-//         break;
-//     case 4:
-//         whatDay = "Thursday";
-    
-//         break;
-//     case 5:
-//         whatDay = "Friday";
-    
-//         break;
-//     case 6:
-//         whatDay = "Saturday";
-    
-//         break;
-
-//     default:
-//         console.log("Wong case");
-// }
